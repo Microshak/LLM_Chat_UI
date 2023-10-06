@@ -1,0 +1,11 @@
+langchain
+huggingface_hub
+llama-cpp-python
+joblib
+
+
+redis
+Flask-SocketIO
+gunicorn
+flask-sock
+python-dotenv

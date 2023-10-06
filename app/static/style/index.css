@@ -1,0 +1,20 @@
+
+.question{
+    background-color: rgb(245 245 245);
+    text-align: right;
+    margin: 10px 0px 20px 25px;
+
+}
+.answer{
+    background-color: rgb(236 254 255);
+    margin: 10px 25px 20px 0px;
+
+
+}
+.questionS{
+    text-align: right;
+
+}
+.answerS{
+    text-align: right;
+}
