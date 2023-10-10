@@ -7,6 +7,8 @@
     <script src="./static/component/curbot.js"></script>
     <script src="./static/js/index.js"></script>
     <script src="./static/component/header.js"></script>
+    <script src="./static/component/input/simple.js"></script>
+
     <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
     <script src="https://unpkg.com/@material-tailwind/html@latest/scripts/collapse.js"></script>
     <link rel="stylesheet" href="./static/style/card.css">
@@ -18,9 +20,9 @@
     <div class="float-left mx-auto p-10 ">
     <curbot-element id="bot"  class="w-max" tags="QA" title="Q & A" description="Simple Q & A" img="./static/img/simple.png"></curbot-element>
     
- 
-
-    
+    <form id="form"  class="mt-10">
+      <simple-input id="smple-input"></simple-input>
+    </form>
     <div class="not-prose relative  rounded-xl overflow-hidden dark:bg-slate-800/25">
     <div class=" inset-0  [mask-image:linear-gradient(0deg,#fff,rgba(255,255,255,0.6))] dark:bg-grid-slate-700/25 dark:[mask-image:linear-gradient(0deg,rgba(255,255,255,0.1),rgba(255,255,255,0.5))]">
     <div class="" id="log"></div>
@@ -28,18 +30,6 @@
   </div>
     <br>
     <br>
-    <form id="form"  class="mt-10">
-      <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
-    <div class="relative">
-        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-            </svg>
-        </div>
-        <input type="search" id="text" class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Chat with me" required>
-    </div>
-     
-    </form>
 
     <div style="margin-top: 20px;" class="rounded-lg border-gray-400 border-solid outline-slate-50">
       <div class="mt-1 flex flex-col sm:mt-0 sm:flex-row sm:flex-wrap sm:space-x-6">

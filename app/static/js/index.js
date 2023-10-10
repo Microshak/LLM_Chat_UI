@@ -58,6 +58,7 @@ const log = (text, className, id, chatNum) => {
     
 var cache = new WebSocket('ws://' + location.host + '/socket');
 cache.addEventListener('message', ev => {
+    console.log(ev.data)
     res = '['+ ev.data.replaceAll('}{','},{')+']'
     
     datarr = JSON.parse(res)
@@ -71,20 +72,32 @@ cache.addEventListener('message', ev => {
 window.onload = function() {
     // do something when the page loads
   
-document.getElementById('form').onsubmit = ev => {
+    document.getElementById('form').onsubmit = ev => {
     ev.preventDefault();
     chatNum++;
     const textField = document.getElementById('text');
     id = curState["id"];
-    msg = JSON.stringify({"txt":textField.value,"id":id, "chatNum":chatNum})
-    cache.send(msg);
-    botstate = curState["bot"]
-    log( textField.value, 'question', curState["id"],chatNum);
+
+
+    var str = '';
+    var msg = {}
+    var elem = document.getElementById('form').elements;
+    for(var i = 0; i < elem.length; i++)
+    {
+        msg[elem[i].id] = elem[i].value
+    } 
+    msg["id"] = id
+    msg["chatNum"] = chatNum
     
+    botstate = curState["bot"]
+    log( "textField.value", 'question', curState["id"],chatNum);
+    console.log(msg)
+    mss = JSON.stringify(msg)
+    cache.send(mss);
     fetch(`http://localhost:5000/${botstate}`, {
     method: "post",
     headers: { "Content-Type": "application/json" },
-    body: msg
+    body: mss
     })
     .then(resp => {
         if (resp.status === 200) {
@@ -103,6 +116,6 @@ document.getElementById('form').onsubmit = ev => {
 
         
       
-      textField.value = '';
+     // textField.value = '';
     };
 };

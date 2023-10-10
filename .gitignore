@@ -9,6 +9,7 @@ venv/
 env*
 dist/
 build/
+model/
 *.egg
 *.egg-info/
 .tox/

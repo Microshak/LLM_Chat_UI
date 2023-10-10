@@ -31,6 +31,7 @@ class MyCustomHandler(BaseCallbackHandler):
     def on_llm_new_token(self, token: str, **kwargs) -> None:
         # Set a value
         ret = {"id":kwargs.get("tags")[0],"chatNum":kwargs.get("tags")[1], "token":token}
+        print(ret)
         r.append(kwargs.get("tags")[0], json.dumps(ret) )
         r.expire(kwargs.get("tags")[0],12000)
         
@@ -51,11 +52,19 @@ llm = LlamaCpp(
 )
 
 @app.route('/')
-def encrypt():
+def index():
     """Renders the home page."""
     return render_template(
         'index.html',
         title='Chat'   )
+
+@app.route('/test')
+def test():
+    """Renders the home page."""
+    return render_template(
+        'test.html',
+        title='Chat'   )
+
 
 @sock.route('/echos')
 def echos(sock):
@@ -78,6 +87,7 @@ def socket(sock):
 def simple():
     data = request.json
     dat = data
+    print(dat)
     msg = dat["txt"]
     id=dat["id"]
     chatNum = dat["chatNum"]
