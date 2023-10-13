@@ -8,6 +8,7 @@
     <script src="./static/js/index.js"></script>
     <script src="./static/component/header.js"></script>
     <script src="./static/component/input/simple.js"></script>
+    <script src="./static/component/input/largeText.js"></script>
 
     <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
     <script src="https://unpkg.com/@material-tailwind/html@latest/scripts/collapse.js"></script>
@@ -24,7 +25,7 @@
       <simple-input id="smple-input"></simple-input>
     </form>
     <div class="not-prose relative  rounded-xl overflow-hidden dark:bg-slate-800/25">
-    <div class=" inset-0  [mask-image:linear-gradient(0deg,#fff,rgba(255,255,255,0.6))] dark:bg-grid-slate-700/25 dark:[mask-image:linear-gradient(0deg,rgba(255,255,255,0.1),rgba(255,255,255,0.5))]">
+    <div  class=" inset-0  [mask-image:linear-gradient(0deg,#fff,rgba(255,255,255,0.6))] dark:bg-grid-slate-700/25 dark:[mask-image:linear-gradient(0deg,rgba(255,255,255,0.1),rgba(255,255,255,0.5))]">
     <div class="" id="log"></div>
     </div>
   </div>
@@ -65,10 +66,12 @@
     </div>
 
     
-    <card-element id="simple"  onclick="changeBot(this)" tags="QA" title="Q & A" description="Simple Q & A" img="./static/img/simple.png"></card-element>
-    <card-element id="marketing" onclick="changeBot(this)" tags="QA,marketing" title="Brainstorming Bot" description="Helps you brainstorm ideas" img="./static/img/simple2.png"></card-element>
-    <card-element id="converstation" onclick="changeBot(this)" tags="QA,convo" title="Converstation" description="Keeps a converstaion" img="./static/img/chat.png"></card-element>
+    <card-element id="simple" input="simple-input" onclick="changeBot(this)" tags="QA" title="Q & A" description="Simple Q & A" img="./static/img/simple.png"></card-element>
+    <card-element id="marketing" input="simple-input" input-placeholder="Brainstorm your ideas. " onclick="changeBot(this)" tags="QA,marketing" title="Brainstorming Bot" description="Helps you brainstorm ideas" img="./static/img/simple2.png"></card-element>
+    <card-element id="summarize" input="large-input" input-placeholder="Text to summarize" onclick="changeBot(this)" tags="QA,convo" title="Summarize" description="Summarizes Text" img="./static/img/chat.png"></card-element>
     <card-element id="catalog" onclick="changeBot(this)" tags="QA,data" title="Data Catalog Bot" description="Ask question about data" img="./static/img/marketing.png"></card-element>
+    <card-element id="wiki" input="simple-input" input-placeholder="Ask wiki a question " onclick="changeBot(this)" tags="QA,marketing" title="Wikipedia Summarize Bot" description="Searches Wikipedia and summerizes the results" img="./static/img/pro4.png"></card-element>
+
   </div>
     <style>
       .resp{

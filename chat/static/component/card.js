@@ -37,6 +37,7 @@ class Card extends HTMLElement {
     var title = document.createElement('h5')
     title.className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
     title.innerHTML = this.getAttribute("title")  
+    
     var tags = this.getAttribute("tags")
     var tag = tags.split(",")
     if(tag.includes('QA'))

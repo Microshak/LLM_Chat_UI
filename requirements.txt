@@ -9,3 +9,5 @@ Flask-SocketIO
 gunicorn
 flask-sock
 python-dotenv
+
+wikipedia

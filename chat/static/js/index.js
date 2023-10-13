@@ -8,15 +8,26 @@ function changeBot(that)
     var title = that.getAttribute("title")
     var src = that.getAttribute('img')
     var tags = that.getAttribute('tags')
+    var input = that.getAttribute('input')
     var description = that.getAttribute('description')
 
-    console.log(src)
     var bot = document.getElementById('bot');
     bot.setAttribute("title", title);
     bot.setAttribute("description", description)
     bot.setAttribute("img", src)
     bot.setAttribute("tags", tags)
- 
+    
+    form = document.getElementById("form")
+    form.innerHTML = ""
+    finput = document.createElement(input)
+    var placeholder = that.getAttribute("input-placeholder")
+    if(placeholder != null)
+    {
+        finput.setAttribute("placeholder" , placeholder)
+
+    }
+    form.appendChild(finput)
+    
 }
 
 
@@ -77,7 +88,7 @@ window.onload = function() {
     chatNum++;
     const textField = document.getElementById('text');
     id = curState["id"];
-
+    
 
     var str = '';
     var msg = {}
@@ -90,7 +101,7 @@ window.onload = function() {
     msg["chatNum"] = chatNum
     
     botstate = curState["bot"]
-    log( "textField.value", 'question', curState["id"],chatNum);
+    log( msg["txt"], 'question', curState["id"],chatNum);
     console.log(msg)
     mss = JSON.stringify(msg)
     cache.send(mss);

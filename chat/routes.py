@@ -1,6 +1,6 @@
 #!/usr/bin/python
 from flask import Flask, redirect, url_for, request, Blueprint
-from . import app
+from chat import app
 from flask import render_template
 from langchain.llms import LlamaCpp
 from flask_sock import Sock
@@ -17,39 +17,20 @@ import json
 from langchain.memory.chat_message_histories import RedisChatMessageHistory
 import os
 from dotenv import load_dotenv
+from langchain.chains.combine_documents.stuff import StuffDocumentsChain
+from chat.wiki import wk
+from chat.common import common
+
+
 
 load_dotenv()
 sock = Sock(app)
-n_gpu_layer = 40
-n_batch = 512
 settings = {}
+common =  common()
+llm = common.llm
+r = common.r
 
-# Create a connection to Redis
-r = redis.Redis(host='localhost', port=6379, decode_responses=True)
-
-class MyCustomHandler(BaseCallbackHandler):
-    def on_llm_new_token(self, token: str, **kwargs) -> None:
-        # Set a value
-        ret = {"id":kwargs.get("tags")[0],"chatNum":kwargs.get("tags")[1], "token":token}
-        print(ret)
-        r.append(kwargs.get("tags")[0], json.dumps(ret) )
-        r.expire(kwargs.get("tags")[0],12000)
-        
-# Callbacks support token-wise streaming
-callback_manager = CallbackManager([MyCustomHandler()])
-
-llm = LlamaCpp(
-    model_path=os.getenv("model"),
-    temperature=0.25,
-    max_tokens=2000,
-    top_p=1,
-    callbacks=[MyCustomHandler()],
-    verbose=True,
-    n_gpu_layers=n_gpu_layer,
-    n_batch=n_batch,
-    n_ctx=2048,
-    f16_kv=True,
-)
+app.register_blueprint(wk)
 
 @app.route('/')
 def index():
@@ -93,19 +74,23 @@ def simple():
     chatNum = dat["chatNum"]
     llm(msg,tags=[id,chatNum])
     return ""
-@app.route('/converstation', methods=['POST'])
-def converstation():
+@app.route('/summarize', methods=['POST'])
+def summarize():
     data = request.json
-    prompt = PromptTemplate(
-    input_variables=["product"],
-    template="What is a good name for a company that makes {product}?",
-)
+    prompt_template = """Write a concise summary of the following:
+    "{text}"
+    CONCISE SUMMARY:"""
+    prompt = PromptTemplate(template=prompt_template
+    ,input_variables=["text"],
+    )
+
     dat = data
     msg = dat["txt"]
     id=dat["id"]
     chatNum = dat["chatNum"]
-    chain = LLMChain(llm=llm, prompt=prompt)
-    chain.run(product=msg, tags=[id,chatNum])
+    summary_prompt = prompt.format(text=msg)
+    llm(summary_prompt,tags=[id,chatNum])
+
     return ""
 
 @app.route('/catalog', methods=['POST'])
