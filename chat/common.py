@@ -19,6 +19,8 @@ class MyCustomHandler(BaseCallbackHandler):
 
     def on_llm_new_token(self, token: str, **kwargs) -> None:
         # Set a value
+        if(len(kwargs.get("tags")) == 0):
+            return
         ret = {"id":kwargs.get("tags")[0],"chatNum":kwargs.get("tags")[1], "token":token}
         self.r.append(kwargs.get("tags")[0], json.dumps(ret) )
         self.r.expire(kwargs.get("tags")[0],12000)
@@ -34,7 +36,7 @@ class common(object):
         self.r = redis.Redis(host='localhost', port=6379, decode_responses=True)
         n_gpu_layer = 40
         n_batch = 512
-        print(os.getenv("model"))
+        #print(os.getenv("model"))
         self.llm =  LlamaCpp(
         model_path=os.getenv("model"),
         temperature=0.25,

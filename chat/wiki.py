@@ -4,7 +4,8 @@ from flask import Blueprint
 from langchain.agents import initialize_agent, Tool
 from langchain.utilities import WikipediaAPIWrapper
 from chat.common import common
-
+import connexion
+import json
 
 from chat import app
 
@@ -18,7 +19,7 @@ wk = Blueprint('wk', __name__)
 @wk.route('/wiki', methods=['POST'])
 def wiki():
     data = request.json
-    dat = data
+    dat =  data
     msg = dat["txt"]
     id=dat["id"]
     chatNum = dat["chatNum"]

@@ -20,3 +20,12 @@ gunicorn  --bind 0.0.0.0:5000 --workers=10 --threads=10 --timeout 2200  chat:app
 ## Redis
 * 0 db for web call chat
 * 1 db for memory
+
+
+# Prompts Templates
+https://madgicx.com/blog/chatgpt-prompts-for-marketing
+
+
+# Login
+LDAP
+https://soshace.com/integrate-ldap-authentication-with-flask/

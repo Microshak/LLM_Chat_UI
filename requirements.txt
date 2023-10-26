@@ -11,3 +11,5 @@ flask-sock
 python-dotenv
 
 wikipedia
+connexion[swagger-ui]
+    

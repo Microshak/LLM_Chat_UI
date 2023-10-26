@@ -46,6 +46,16 @@ def test():
         'test.html',
         title='Chat'   )
 
+@app.route('/api/apitest')
+def apitest():
+    """Find pets by ID
+
+    Return pets based on ID.
+    ---
+    Internal comment not meant to be exposed.
+    """
+    return {"yo":"yo"}
+
 
 @sock.route('/echos')
 def echos(sock):
@@ -64,6 +74,7 @@ def socket(sock):
         if resp is not None:
             sock.send(resp)
 
+
 @app.route('/simple', methods=['POST'])
 def simple():
     data = request.json
@@ -72,26 +83,25 @@ def simple():
     msg = dat["txt"]
     id=dat["id"]
     chatNum = dat["chatNum"]
-    llm(msg,tags=[id,chatNum])
-    return ""
-@app.route('/summarize', methods=['POST'])
-def summarize():
+    ret = llm(msg,tags=[id,chatNum])
+    return ret
+
+
+@app.route('/marketingEmail', methods=['POST'])
+def me():
     data = request.json
-    prompt_template = """Write a concise summary of the following:
-    "{text}"
-    CONCISE SUMMARY:"""
-    prompt = PromptTemplate(template=prompt_template
-    ,input_variables=["text"],
-    )
-
     dat = data
-    msg = dat["txt"]
-    id=dat["id"]
-    chatNum = dat["chatNum"]
-    summary_prompt = prompt.format(text=msg)
-    llm(summary_prompt,tags=[id,chatNum])
+    
+    msg = f'''You are a chat bot named {data["from"]} working for a the BHG Money.  
+    Create an email to {data["to"]} who works for {data["company"]} telling him that the current bid is ${data["currentBid"]} 
+    and he needs to put in a higher bid.  Their last bid was {data["theirbid"]}. 
+    The final answer should be in the following JSON format only:
+    '''
+    sch = '{"to":"","subject":"","body":""}'
+    ret = llm(msg+sch)
+    return ret
 
-    return ""
+    
 
 @app.route('/catalog', methods=['POST'])
 def catalog():
