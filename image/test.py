@@ -21,8 +21,8 @@ import matplotlib.pyplot as plt
 from PIL import Image
 
 
-model = keras_cv.models.StableDiffusion(img_height=128, 
-                                        img_width=128)
+model = keras_cv.models.StableDiffusion(img_height=256, 
+                                        img_width=256)
 
 
 with tf.device('/gpu:1'):
