@@ -20,7 +20,7 @@ from dotenv import load_dotenv
 from langchain.chains.combine_documents.stuff import StuffDocumentsChain
 from chat.wiki import wk
 from chat.common import common
-
+from chat.image import im
 
 
 load_dotenv()
@@ -31,6 +31,8 @@ llm = common.llm
 r = common.r
 
 app.register_blueprint(wk)
+app.register_blueprint(im)
+
 
 @app.route('/')
 def index():

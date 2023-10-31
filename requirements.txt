@@ -11,5 +11,9 @@ flask-sock
 python-dotenv
 
 wikipedia
-connexion[swagger-ui]
-    
+
+
+tensorflow
+matplotlib
+keras-cv
+opencv-python
