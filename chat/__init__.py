@@ -6,6 +6,7 @@ app = Flask(__name__)
 
 
 import chat.routes
-import chat.wiki
-import chat.image
-
+import chat.language.wiki
+import chat.vision.image
+import chat.language.simple
+import chat.domain.catalog

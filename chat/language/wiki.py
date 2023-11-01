@@ -4,8 +4,6 @@ from flask import Blueprint
 from langchain.agents import initialize_agent, Tool
 from langchain.utilities import WikipediaAPIWrapper
 from chat.common import common
-import connexion
-import json
 
 from chat import app
 

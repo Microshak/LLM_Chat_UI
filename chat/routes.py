@@ -18,9 +18,11 @@ from langchain.memory.chat_message_histories import RedisChatMessageHistory
 import os
 from dotenv import load_dotenv
 from langchain.chains.combine_documents.stuff import StuffDocumentsChain
-from chat.wiki import wk
+from chat.language.wiki import wk
+from chat.language.simple import simp
 from chat.common import common
-from chat.image import im
+from chat.vision.image import im
+from chat.domain.catalog import cat
 
 
 load_dotenv()
@@ -32,6 +34,8 @@ r = common.r
 
 app.register_blueprint(wk)
 app.register_blueprint(im)
+app.register_blueprint(simp)
+app.register_blueprint(cat)
 
 
 @app.route('/')
@@ -48,15 +52,6 @@ def test():
         'test.html',
         title='Chat'   )
 
-@app.route('/api/apitest')
-def apitest():
-    """Find pets by ID
-
-    Return pets based on ID.
-    ---
-    Internal comment not meant to be exposed.
-    """
-    return {"yo":"yo"}
 
 
 @sock.route('/echos')
@@ -77,16 +72,6 @@ def socket(sock):
             sock.send(resp)
 
 
-@app.route('/simple', methods=['POST'])
-def simple():
-    data = request.json
-    dat = data
-    print(dat)
-    msg = dat["txt"]
-    id=dat["id"]
-    chatNum = dat["chatNum"]
-    ret = llm(msg,tags=[id,chatNum])
-    return ret
 
 
 @app.route('/marketingEmail', methods=['POST'])
@@ -104,21 +89,6 @@ def me():
     return ret
 
     
-
-@app.route('/catalog', methods=['POST'])
-def catalog():
-    data = request.json
-    prompt = PromptTemplate(
-    input_variables=["product"],
-    template="What is a good name for a company that makes {product}?",
-)
-    dat = data
-    msg = dat["txt"]
-    id=dat["id"]
-    chatNum = dat["chatNum"]
-    chain = LLMChain(llm=llm, prompt=prompt)
-    chain.run(product=msg, tags=[id,chatNum])
-    return ""
 
 @app.route('/marketing', methods=['POST'])
 def marketing():

@@ -29,3 +29,7 @@ https://madgicx.com/blog/chatgpt-prompts-for-marketing
 # Login
 LDAP
 https://soshace.com/integrate-ldap-authentication-with-flask/
+
+
+TODO:
+Container https://github.com/NVIDIA/nvidia-container-toolkit
