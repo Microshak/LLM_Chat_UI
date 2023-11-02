@@ -11,7 +11,6 @@ from langchain.chains import LLMChain
 from langchain.prompts import PromptTemplate
 from langchain.memory import ConversationSummaryBufferMemory
 from langchain.chains import ConversationChain
-import redis
 import time
 import json
 from langchain.memory.chat_message_histories import RedisChatMessageHistory
@@ -30,7 +29,7 @@ sock = Sock(app)
 settings = {}
 common =  common()
 llm = common.llm
-r = common.r
+redis = common.chatredis
 
 app.register_blueprint(wk)
 app.register_blueprint(im)
@@ -43,6 +42,14 @@ def index():
     """Renders the home page."""
     return render_template(
         'index.html',
+        title='Chat'   )
+
+
+@app.route('/image')
+def image():
+    """Renders the home page."""
+    return render_template(
+        'image.html',
         title='Chat'   )
 
 @app.route('/test')
@@ -67,7 +74,7 @@ def socket(sock):
     id=dat["id"]
     while True :
         time.sleep(1)
-        resp = r.getdel(id)
+        resp = redis.getdel(id)
         if resp is not None:
             sock.send(resp)
 

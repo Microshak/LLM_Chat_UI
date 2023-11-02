@@ -33,8 +33,11 @@ class common(object):
     callback_manager = CallbackManager([MyCustomHandler()])
 
     def __init__(self):
-        self.r = redis.Redis(host='localhost', port=6379, decode_responses=True)
+        self.chatredis = redis.Redis(host='localhost', db=0, port=6379, decode_responses=True)
+        self.imageredis = redis.Redis(host='localhost', db=2, port=6379, decode_responses=True)
+
         n_gpu_layer = 40
+
         n_batch = 512
         #print(os.getenv("model"))
         self.llm =  LlamaCpp(

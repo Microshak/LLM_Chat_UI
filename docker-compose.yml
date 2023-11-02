@@ -10,7 +10,7 @@ services:
       - ETCD_QUOTA_BACKEND_BYTES=4294967296
       - ETCD_SNAPSHOT_COUNT=50000
     volumes:
-      - vectordb/volumes/etcd:/etcd
+      - ./vectordb/volumes/etcd:/etcd
     command: etcd -advertise-client-urls=http://127.0.0.1:2379 -listen-client-urls http://0.0.0.0:2379 --data-dir /etcd
 
   minio:
@@ -20,7 +20,7 @@ services:
       MINIO_ACCESS_KEY: minioadmin
       MINIO_SECRET_KEY: minioadmin
     volumes:
-      - vectordb/volumes/minio:/minio_data
+      - ./vectordb/volumes/minio:/minio_data
     command: minio server /minio_data
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
@@ -36,7 +36,7 @@ services:
       ETCD_ENDPOINTS: etcd:2379
       MINIO_ADDRESS: minio:9000
     volumes:
-      - vectordb/volumes/milvus:/var/lib/milvus
+      - ./vectordb/volumes/milvus:/var/lib/milvus
     ports:
       - "19530:19530"
       - "9091:9091"
@@ -50,9 +50,27 @@ services:
         - '6379:6379'
         - '8001:8001'
     image: 'redis/redis-stack:latest'
+  
+  kafka:
+    image: 'bitnami/kafka:latest'
+    networks:
+      - app-tier
+    environment:
+      - KAFKA_CFG_NODE_ID=0
+      - KAFKA_CFG_PROCESS_ROLES=controller,broker
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+    ports:
+      - "9092:9092"
 
 networks:
   default:
     name: milvus
+  app-tier:
+    driver: bridge
 
-  
+
+
+

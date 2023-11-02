@@ -105,6 +105,7 @@ window.onload = function() {
     console.log(msg)
     mss = JSON.stringify(msg)
     cache.send(mss);
+    
     fetch(`http://localhost:5000/${botstate}`, {
     method: "post",
     headers: { "Content-Type": "application/json" },
