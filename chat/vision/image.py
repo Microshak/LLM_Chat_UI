@@ -16,6 +16,7 @@ import json
 import os
 
 import datetime
+from kafka import  KafkaProducer
 
 
 #from flask import Flask
@@ -31,25 +32,12 @@ redis = common.imageredis
 
 #@im.route('/historicimage', methods=['GET'])
 #def historicimage():
-from kafka import KafkaConsumer, KafkaProducer
     
 
 producer = KafkaProducer(
-    bootstrap_servers="localhost:9092",
-    security_protocol="SSL"
+    bootstrap_servers=['localhost:9092']
 )
 
-consumer = KafkaConsumer(
-    client_id="client3",
-        group_id="CONSUMER_GROUP_CALC",
-        bootstrap_servers="localhost:9092",
-        security_protocol="SSL",
-        max_poll_records=1,
-        auto_offset_reset='earliest',
-        session_timeout_ms=6000,
-        heartbeat_interval_ms=3000,
-        value_deserializer=lambda x: json.loads(x.decode("utf-8"))
-)
 
 
 
@@ -81,51 +69,3 @@ def queueimage():
 
     producer.flush()
 
-def processImage():
-    tf.device("/cpu:0")
-    consumer.subscribe("image_queue")
-    for message in consumer:
-        message = f"""
-        Message received: {message.value}
-        Message key: {message.key}
-        Message partition: {message.partition}
-        Message offset: {message.offset}
-        """
-        fileName = message.key
-        img_height = message.value["img_height"]
-        img_width = message.value["img_width"]
-        prompt = message.value["prompt"]
-        imageInfo = message.value
-        imageInfo["status"] = "processing"
-        redis.set(fileName,imageInfo)
-
-        model = keras_cv.models.StableDiffusion(img_height=img_height, 
-                                            img_width=img_width,
-                                            jit_compile=True)
-        model.cdevice = "cpu:0"
-
-        with tf.device('/cpu:0'):
-        # Create images from text
-            images = model.text_to_image(prompt=prompt, batch_size=1)
-            img = images[0]
-            
-            thumbheight = 150 # percent of original size
-            thumbwidth = int(img.shape[1] * thumbheight / img_height)
-            
-            dim = (thumbwidth, thumbheight)
-            resized = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
-            
-            base = im.root_path.replace("/vision","")
-            path = os.path.join(base, 'static/img/generated/')  
-            imgName = path + fileName + ".png"
-            thumbName =path + fileName + "_thumb.png"
-            cv2.imwrite(thumbName, resized)
-            
-            Image.fromarray(images[0]).save(imgName)
-            _, im_bytes_np = cv2.imencode('.png', images[0])
-            bytes_str = im_bytes_np.tobytes()
-            response = flask.make_response(bytes_str)
-            response.headers.set('Content-Type', 'image/png')
-            
-            imageInfo["status"] = "ready"
-            redis.set(fileName,imageInfo)

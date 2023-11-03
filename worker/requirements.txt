@@ -1,0 +1,11 @@
+joblib
+redis
+python-dotenv
+
+tensorflow
+matplotlib
+keras-cv
+opencv-python
+
+
+kafka-python

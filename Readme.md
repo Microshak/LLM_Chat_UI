@@ -32,5 +32,21 @@ LDAP
 https://soshace.com/integrate-ldap-authentication-with-flask/
 
 
-TODO:
-Container https://github.com/NVIDIA/nvidia-container-toolkit
+# Container
+## Computer
+To get docker to work with Nvidia you need to install the Nvidia container tool kit.
+https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
+
+
+More info
+https://github.com/NVIDIA/nvidia-container-toolkit
+
+## Build Run
+```
+sudo docker build -t work .
+docker run --gpus all -it -t work
+
+```
+
+
+https://docs.nvidia.com/deeplearning/frameworks/support-matrix/index.html#framework-matrix-2023

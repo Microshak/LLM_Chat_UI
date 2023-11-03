@@ -1,7 +1,7 @@
 FROM python:3.9.16-bullseye
 
 
-RUN useradd -m llm
+RUN useradd -m app
 
 WORKDIR /home/llm
 
@@ -21,4 +21,4 @@ USER app
 EXPOSE 5000
 #ENTRYPOINT ["./boot.sh"]
 # HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD curl -f http://localhost:5000/health
-CMD ["gunicorn"  , "-b", "0.0.0.0:5000","--workers","10","--timeout","555555","--threads","10" ,"app:app"]
+CMD ["gunicorn"  , "-b", "0.0.0.0:5000","--workers","10","--timeout","555555","--threads","10" ,"chat:app"]

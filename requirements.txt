@@ -17,3 +17,6 @@ tensorflow
 matplotlib
 keras-cv
 opencv-python
+
+
+kafka-python
