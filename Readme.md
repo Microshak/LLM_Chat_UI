@@ -50,3 +50,8 @@ docker run --gpus all -it -t work
 
 
 https://docs.nvidia.com/deeplearning/frameworks/support-matrix/index.html#framework-matrix-2023
+
+
+# TODO 
+
+https://smith.langchain.com/hub/gitmaxd/synthetic-training-data/playground?organizationId=70e5b93e-41f9-5efa-a842-2e4db5e113ed
