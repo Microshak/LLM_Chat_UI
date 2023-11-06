@@ -41,6 +41,23 @@ producer = KafkaProducer(
 
 
 
+@im.route('/getImages', methods=['GET'])
+def queueimage():
+    
+    RET = {}
+    # get all keys
+    keys = redis.keys()
+    ret = []
+    # iterate over keys and get values
+    for key in keys:
+        value = redis.get(key)
+        print(key, value)
+        temp = json.dumps(value)
+        temp['thumb'] = f'./{key}_thumb.png'
+        temp['image'] = f'./{key}.png'
+        ret.append(temp)
+    return ret
+
 
 @im.route('/queueimage', methods=['POST'])
 def queueimage():
