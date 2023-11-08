@@ -1,0 +1,47 @@
+version: '3.5'
+
+services:
+
+  worker:
+    restart: always
+  #  depends_on:
+  #    - broker
+#    networks:
+#      - proxynet
+#      - b-net
+    build:
+      context: .
+      dockerfile: worker/Dockerfile
+    volumes:
+      - ./chat/static/img:/home/generated
+      - ./worker/gen:/home/worker
+#    ipc: host
+#    ulimits:
+#      stack: 67108864
+#      memlock: -1
+
+
+  #  deploy:
+  #    resources:
+  #      reservations:
+  #        devices:
+  #          - driver: nvidia
+  #            count: 2
+  #            capabilities: [gpu]
+
+  mongodb:
+    image: mongo:6-jammy
+    ports:
+      - '27017:27017'
+#    volumes:
+#      - db/mongo:/data/db
+#volumes:
+#  dbdata6:
+
+networks:
+  app-tier:
+    driver: bridge
+
+
+
+

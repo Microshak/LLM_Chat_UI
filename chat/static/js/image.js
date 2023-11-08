@@ -35,6 +35,53 @@ window.onload = function() {
             if (err === "server") return
             console.log(err)
         })
-    
+
+        
+
+        document.getElementById('form').onsubmit = ev => {
+            ev.preventDefault();
+            const oprompt = document.getElementById('txt');
+            let prompt = oprompt.value
+            console.log(prompt)
+            var oheight = document.getElementById("height");
+            var height = oheight.value;
+            var owidth = document.getElementById("width");
+            var width = owidth.value;
+            
+            let msg = {
+                "img_height" : height,
+                "img_width":  width,
+                "prompt" : prompt
+             
+
+            }
+
+            fetch(`http://localhost:5000/api/queueimage`, {
+            method: "post",
+            headers: { "Content-Type": "application/json" },
+            body:JSON.stringify(msg) 
+            })
+            .then(resp => {
+                if (resp.status === 200) {
+                    console.log(resp)
+                } else {
+                    console.log("Status: " + resp.status)
+                    return Promise.reject("server")
+                }
+            })
+            .catch(err => {
+                if (err === "server") return
+                console.log(err)
+            })
+        
+        
+        
+                
+              
+             // textField.value = '';
+            };
+
+
+
 
 }

@@ -42,9 +42,8 @@ producer = KafkaProducer(
 
 
 @im.route('/getImages', methods=['GET'])
-def queueimage():
+def getImages():
     
-    RET = {}
     # get all keys
     keys = redis.keys()
     ret = []
@@ -52,18 +51,19 @@ def queueimage():
     for key in keys:
         value = redis.get(key)
         print(key, value)
-        temp = json.dumps(value)
-        temp['thumb'] = f'./{key}_thumb.png'
-        temp['image'] = f'./{key}.png'
+        temp = json.loads(value)
+        temp['thumb'] = f'./{str(key)}_thumb.png'
+        temp['image'] = f'./{str(key)}.png'
         ret.append(temp)
     return ret
 
 
 @im.route('/queueimage', methods=['POST'])
 def queueimage():
-    tf.device("/cpu:0")
     
     data = request.json
+    print(data)
+    
     img_height = data["img_height"]
     img_width = data["img_width"]
     prompt = data["prompt"]
@@ -75,14 +75,25 @@ def queueimage():
     fileName=ticks
     value = json.dumps({"prompt":prompt,"img_height":img_height, "img_width":img_width, "status":"queued"})
     imageInfo = value
-    
+    print(value)
     redis.set(fileName,imageInfo)
     redis.expire(fileName,86400*7)
+
+
+    def on_delivery(record_metadata, exception):
+        if exception is not None:
+            print('Error: {}'.format(exception))
+        else:
+            print('Record {} was successfully delivered to topic {}'.format(record_metadata.topic, record_metadata.partition))
+
+    producer.on_delivery = on_delivery
+
+
     producer.send(
-            "image_queue",
-            key=fileName,
-            value=value
+            "image_queue", 
+            key=fileName.encode('utf-8'),
+            value= json.dumps(value).encode('utf-8')
         )
 
-    producer.flush()
-
+#    producer.close()
+    return value

@@ -1,19 +1,16 @@
-from kafka import KafkaConsumer, KafkaProducer
-import tensorflow as tf
-from tensorflow import keras
-import  keras_cv
-import matplotlib.pyplot as plt
+from kafka import KafkaConsumer
 
 # Save the image
-from PIL import Image
 import cv2
 import json
 import redis
 import time
+import numpy as np
 
 
 class imageProcesser():
     def __init__(self):
+        print('hello')
         self.imageredis = redis.Redis(host='192.168.0.240', db=2, port=6379, decode_responses=True)
 
         self.consumer = KafkaConsumer(
@@ -28,7 +25,6 @@ class imageProcesser():
         )
 
     def processImage(self):
-        tf.device("/cpu:0")
         print('checking kafka')
         self.consumer.subscribe("image_queue")
         for message in self.consumer:
@@ -50,33 +46,26 @@ class imageProcesser():
             updated = json.dumps(imageInfo)
             self.imageredis.set(fileName,updated)
 
-            model = keras_cv.models.StableDiffusion(img_height=img_height, img_width=img_width, jit_compile=True)
-            model.cdevice = "cpu:0"
+                
+            path = '/home/generated/'  
+            #path = '/home/microshak/Source/'
+            imgName = path + fileName + ".png"
+            thumbName =path + fileName + "_thumb.png"
+            # Create a blank image
+            img = np.zeros((500, 500, 3), dtype=np.uint8)
 
-            with tf.device('/cpu:0'):
-            # Create images from text
-                images = model.text_to_image(prompt=prompt, batch_size=1)
-                img = images[0]
-                
-                thumbheight = 150 # percent of original size
-                thumbwidth = int(img.shape[1] * thumbheight / img_height)
-                
-                dim = (thumbwidth, thumbheight)
-                resized = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
-                
-                
-                path = '/home/generated/'  
-                imgName = path + fileName + ".png"
-                thumbName =path + fileName + "_thumb.png"
-                cv2.imwrite(thumbName, resized)
-                
-                Image.fromarray(images[0]).save(imgName)
-                
-                imageInfo["status"] = "ready"
-                updated = json.dumps(imageInfo)
-                self.imageredis.set(fileName,updated)
+            # Draw text on the image
+            cv2.putText(img, prompt, (100, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
 
 
+            cv2.imwrite(thumbName, img)
+            
+            
+            imageInfo["status"] = "ready"
+            updated = json.dumps(imageInfo)
+            self.imageredis.set(fileName,updated)
+
+print("DDDDDDDDDDDDDDDDDDDDDDDDDD")
 
 ip = imageProcesser()
 while True == True:
