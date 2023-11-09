@@ -1,4 +1,4 @@
-FROM python:3.9.16-bullseye
+FROM nvcr.io/nvidia/tensorflow:23.10-tf2-py3
 
 
 RUN useradd -m app
