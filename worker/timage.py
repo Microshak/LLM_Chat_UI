@@ -11,12 +11,14 @@ import numpy as np
 class imageProcesser():
     def __init__(self):
         print('hello')
-        self.imageredis = redis.Redis(host='192.168.0.240', db=2, port=6379, decode_responses=True)
+        redisURL = os.getenv("redisURL")
+
+        self.imageredis = redis.Redis(host=redisURL, db=2, port=6379, decode_responses=True)
 
         self.consumer = KafkaConsumer(
             client_id="client3",
                 group_id="CONSUMER_GROUP_CALC22",
-                bootstrap_servers="192.168.0.240:9092",
+                bootstrap_servers="localhost:9092",
                 max_poll_records=1,
                 auto_offset_reset='earliest',
                 session_timeout_ms=6000,

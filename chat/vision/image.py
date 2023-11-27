@@ -1,3 +1,5 @@
+
+'''
 from flask import Flask, redirect, url_for, request, Blueprint
 
 from flask import Blueprint
@@ -18,13 +20,19 @@ import os
 import datetime
 from kafka import  KafkaProducer
 
+im = Blueprint('im', __name__ ,url_prefix='/api')
+
+
+
+
+
+
 
 #from flask import Flask
 #from flask_apscheduler import APScheduler
 common =  common()
 keras.mixed_precision.set_global_policy("float32")
 
-im = Blueprint('im', __name__ ,url_prefix='/api')
 
 gpus = tf.config.list_physical_devices('GPU')
 
@@ -37,8 +45,6 @@ redis = common.imageredis
 producer = KafkaProducer(
     bootstrap_servers=['localhost:9092']
 )
-
-
 
 
 @im.route('/getImages', methods=['GET'])
@@ -97,3 +103,4 @@ def queueimage():
 
 #    producer.close()
     return value
+'''

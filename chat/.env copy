@@ -1,0 +1,2 @@
+model=/mnt/c/Source/LLM_Chat_UI/model/llama-2-7b-chat.Q4_K_M.gguf
+gpu=True

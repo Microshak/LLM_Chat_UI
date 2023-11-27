@@ -82,7 +82,7 @@ cache.addEventListener('message', ev => {
 
 window.onload = function() {
     // do something when the page loads
-  
+    console.warn(location.host)
     document.getElementById('form').onsubmit = ev => {
     ev.preventDefault();
     chatNum++;
@@ -106,7 +106,7 @@ window.onload = function() {
     mss = JSON.stringify(msg)
     cache.send(mss);
     
-    fetch(`http://localhost:5000/${botstate}`, {
+    fetch(`http://${location.host}/${botstate}`, {
     method: "post",
     headers: { "Content-Type": "application/json" },
     body: mss

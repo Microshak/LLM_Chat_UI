@@ -18,9 +18,10 @@ import os
 from dotenv import load_dotenv
 from langchain.chains.combine_documents.stuff import StuffDocumentsChain
 from chat.language.wiki import wk
+from chat.language.summarize import sum
 from chat.language.simple import simp
 from chat.common import common
-from chat.vision.image import im
+#from chat.vision.image import im
 from chat.domain.catalog import cat
 
 
@@ -32,9 +33,10 @@ llm = common.llm
 redis = common.chatredis
 
 app.register_blueprint(wk)
-app.register_blueprint(im)
+#app.register_blueprint(im)
 app.register_blueprint(simp)
 app.register_blueprint(cat)
+app.register_blueprint(sum)
 
 
 @app.route('/')
@@ -116,8 +118,9 @@ def marketing():
     msg = dat["txt"]
     id=dat["id"]
     chatNum = dat["chatNum"]
+    redisURL = os.getenv("redisURL")
     history = RedisChatMessageHistory(
-        url="redis://localhost:6379/1", ttl=600, session_id=id
+        url=f"redis://{redisURL}/1",  ttl=600, session_id=id
     )
 
     memory = ConversationSummaryBufferMemory(
